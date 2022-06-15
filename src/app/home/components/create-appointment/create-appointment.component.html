@@ -1,0 +1,43 @@
+<div class="container">
+  <label>Selecione o serviço</label>
+  <select class="form-select mb-3" aria-label="Default select example">
+    <option value="1">Corte de cabelo</option>
+    <option value="2">Luzes</option>
+    <option value="3">Lavagem</option>
+  </select>
+  <label>Selecione a data</label>
+  <select class="form-select mb-3" aria-label="Default select example">
+    <option value="1">14/06/2022</option>
+    <option value="2">15/06/2022</option>
+    <option value="3">16/06/2022</option>
+  </select>
+  <label for="cpf_customer">Digite o documento do cliente</label>
+  <input
+    id="cpf_customer"
+    class="form-control input_border mb-3"
+    type="text"
+    placeholder="Cpf do Cliente"
+  />
+  <label for="cpf_customer">Digite o nome do cliente</label>
+  <input
+    id="name_customer"
+    class="form-control input_border mb-3"
+    type="text"
+    placeholder="Nome do Cliente"
+  />
+  <p>Horários diponíveis</p>
+  <div class="row d-flex flex-row flex-wrap p-3">
+    <button type="button" class="btn btn-outline-success btn-sm">08:00</button>
+    <button type="button" class="btn btn-outline-success btn-sm">09:00</button>
+    <button type="button" class="btn btn-outline-success btn-sm">10:00</button>
+    <button type="button" class="btn btn-outline-success btn-sm">11:00</button>
+    <button type="button" class="btn btn-outline-success btn-sm">12:00</button>
+    <button type="button" class="btn btn-outline-success btn-sm">13:00</button>
+  </div>
+  <button type="submit" class="btn btn-primary">
+    <div class="d-flex justify-content-center">
+      <div *ngIf="loading" class="spinner"></div>
+      Salvar
+    </div>
+  </button>
+</div>

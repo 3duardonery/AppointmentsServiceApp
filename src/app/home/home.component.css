@@ -1,0 +1,22 @@
+.menu_item {
+  width: 200px;
+  height: 180px;
+  background-color: var(--primary-color);
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+}
+
+svg path {
+  fill: white;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
