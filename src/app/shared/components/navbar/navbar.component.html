@@ -14,7 +14,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
     </div>
-    <ng-container *ngIf="isAuthenticated">
+    <ng-container *ngIf="isAuthenticated$ | async">
       <div class="d-flex flex-row align-items-baseline">
         <a href="" (click)="logOffOutputHandler()"
           ><svg

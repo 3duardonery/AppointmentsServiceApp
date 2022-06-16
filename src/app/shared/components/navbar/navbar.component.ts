@@ -1,8 +1,11 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { map, Observable, take } from 'rxjs';
 import { selectAuthState } from 'src/app/login/store/app.state';
-import { AuthState } from 'src/app/login/store/reducers/auth.reducer';
+import {
+  AuthState,
+  isAuthenticated,
+  seletcToken,
+} from 'src/app/login/store/reducers/auth.reducer';
 
 @Component({
   selector: 'app-navbar',
@@ -12,21 +15,11 @@ import { AuthState } from 'src/app/login/store/reducers/auth.reducer';
 export class NavbarComponent implements OnInit {
   @Output() logOffOutput: EventEmitter<any> = new EventEmitter();
 
-  //authPage$ = this._store.select('app').pipe(map((e) => e));
+  isAuthenticated$ = this.store.select(isAuthenticated);
 
-  isAuthenticated = false;
+  constructor(private store: Store<AuthState>) {}
 
-  getState!: Observable<any>;
-
-  constructor(private _store: Store<AuthState>) {
-    this.getState = this._store.select(selectAuthState);
-  }
-
-  ngOnInit(): void {
-    console.log(localStorage.getItem('authentication_data') != null);
-
-    this.isAuthenticated = localStorage.getItem('authentication_data') != null;
-  }
+  ngOnInit(): void {}
 
   logOffOutputHandler(): void {
     this.logOffOutput.emit();

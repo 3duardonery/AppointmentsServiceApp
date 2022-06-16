@@ -5,11 +5,18 @@ import {
   HttpEvent,
   HttpInterceptor,
 } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, take } from 'rxjs';
+import { Store } from '@ngrx/store';
+import {
+  AuthState,
+  seletcToken,
+} from 'src/app/login/store/reducers/auth.reducer';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
-  constructor() {}
+  token$ = this.store.select(seletcToken);
+
+  constructor(private store: Store<AuthState>) {}
 
   intercept(
     request: HttpRequest<any>,
@@ -18,14 +25,11 @@ export class TokenInterceptor implements HttpInterceptor {
     console.log(request.url);
 
     if (request.url.indexOf('authentication') < 0) {
-      let token =
-        JSON.parse(localStorage.getItem('authentication_data') ?? '')[
-          'token'
-        ] ?? '';
+      let token = '';
+
+      this.token$.pipe(take(1)).subscribe((value) => (token = value));
 
       console.log(token);
-
-      console.log(localStorage.getItem('authentication_data'));
 
       request = request.clone({
         setHeaders: {

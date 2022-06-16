@@ -11,7 +11,14 @@
     </option>
   </select>
   <label>Selecione a data</label>
-  <select class="form-select mb-3" aria-label="Default select example">
+  <select
+    class="form-select mb-3"
+    aria-label="Default select example"
+    (change)="getAvailableHoursByServiceId($event)"
+  >
+    <option value="default">
+      Há {{ availableDates.length }} datas disponíveis
+    </option>
     <option
       *ngFor="let availableDate of availableDates"
       [value]="availableDate"
@@ -34,18 +41,38 @@
     placeholder="Nome do Cliente"
   />
   <p>Horários diponíveis</p>
-  <div class="row d-flex flex-row flex-wrap p-3">
-    <button type="button" class="btn btn-outline-success btn-sm">08:00</button>
-    <button type="button" class="btn btn-outline-success btn-sm">09:00</button>
-    <button type="button" class="btn btn-outline-success btn-sm">10:00</button>
-    <button type="button" class="btn btn-outline-success btn-sm">11:00</button>
-    <button type="button" class="btn btn-outline-success btn-sm">12:00</button>
-    <button type="button" class="btn btn-outline-success btn-sm">13:00</button>
-  </div>
-  <button type="submit" class="btn btn-primary">
-    <div class="d-flex justify-content-center">
-      <div *ngIf="loading" class="spinner"></div>
-      Salvar
+  <div class="row d-flex flex-row flex-wrap">
+    <div
+      class="btn-group"
+      role="group"
+      aria-label="Basic radio toggle button group"
+    >
+      <div
+        class="d-flex flex-row justify-content-center"
+        *ngFor="let hour of availableHours"
+      >
+        <input
+          type="radio"
+          class="btn-check"
+          name="btnradio"
+          id="{{ hour }}"
+          autocomplete="off"
+          (click)="selectTime(hour)"
+        />
+        <label class="btn btn-outline-success" for="{{ hour }}">{{
+          hour
+        }}</label>
+      </div>
     </div>
-  </button>
+    <div class="row">
+      <div class="col-3">
+        <button type="submit" class="btn btn-primary mt-3">
+          <div class="d-flex justify-content-center">
+            <div *ngIf="loading" class="spinner"></div>
+            Salvar
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

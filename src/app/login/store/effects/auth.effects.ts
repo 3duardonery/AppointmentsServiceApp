@@ -1,16 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, exhaustMap, map, of, switchMap, tap } from 'rxjs';
-import { User } from 'src/app/shared/models/user-model';
+import { catchError, exhaustMap, map, of, tap } from 'rxjs';
 import { AuthenticationService } from 'src/app/shared/services/authentication.service';
 
-import {
-  login,
-  loginFailure,
-  loginSuccess,
-  logout,
-} from '../actions/auth.actions';
+import * as AuthActions from '../actions/auth.actions';
 
 @Injectable()
 export class AuthEffects {
@@ -20,18 +14,27 @@ export class AuthEffects {
     private router: Router
   ) {}
 
-  login$ = createEffect(() =>
+  loginRequest$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(login),
+      ofType(AuthActions.loginRequest),
       exhaustMap((action) =>
-        this.authService.login(action).pipe(
-          map((res: any) => {
-            if (res && res.user) {
-              return loginSuccess(res);
-            }
-            return loginFailure(res);
+        this.authService
+          .login({
+            email: action.email,
+            password: action.password,
           })
-        )
+          .pipe(
+            map((loginSuccessResponse) =>
+              AuthActions.loginSuccess({
+                email: loginSuccessResponse.email,
+                isAuthenticated: true,
+                token: loginSuccessResponse.idToken,
+              })
+            ),
+            catchError((errorMessage) =>
+              of(AuthActions.loginFailure({ errorMessage }))
+            )
+          )
       )
     )
   );
@@ -39,13 +42,8 @@ export class AuthEffects {
   $loginSuccess = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(loginSuccess),
+        ofType(AuthActions.loginSuccess),
         tap(({ token, email }) => {
-          let data = {
-            email: email,
-            token: token,
-          };
-          localStorage.setItem('authentication_data', JSON.stringify(data));
           this.router.navigateByUrl('/home');
         })
       ),
@@ -55,7 +53,7 @@ export class AuthEffects {
   $logout = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(logout),
+        ofType(AuthActions.logout),
         tap(() => {
           localStorage.clear();
           this.router.navigateByUrl('/login');

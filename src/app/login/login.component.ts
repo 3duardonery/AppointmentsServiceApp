@@ -13,11 +13,7 @@ import { map, take } from 'rxjs';
 import { StaticLabels } from '../shared/constants/static-labels';
 import { User } from '../shared/models/user-model';
 import { AuthenticationService } from '../shared/services/authentication.service';
-import {
-  loginSuccess,
-  setAuthData,
-  setTokenLocalStorage,
-} from './store/actions/auth.actions';
+import { loginRequest, loginSuccess } from './store/actions/auth.actions';
 import { AppState } from './store/app.state';
 import { AuthState } from './store/reducers/auth.reducer';
 
@@ -59,9 +55,9 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.toast = new Toast(this.toastEl.nativeElement, {});
 
-    // this.authPage$
-    //   .pipe(take(1))
-    //   .subscribe((data) => (this.isAuthenticated = data.isAuthenticated));
+    this.authPage$.pipe(take(1)).subscribe((data) => {
+      if (data == undefined) this._authService.logout();
+    });
 
     this.loginGroup = new FormGroup({
       email: new FormControl(this.user.email, [Validators.required]),
@@ -81,33 +77,39 @@ export class LoginComponent implements OnInit {
       password: this.loginGroup.get('password')?.value,
     };
 
-    this._authService.login(user).subscribe({
-      next: (data) => {
-        this.setLoginState(data.email, data.idToken);
-      },
-      error: (error) => {
-        this.toast?.show();
-        this.loading = false;
-      },
-      complete: () => {
-        console.info('request finished');
-        this.loading = false;
-      },
-    });
-  }
-
-  private setLoginState(email: string, token: string): void {
-    this._store.dispatch(
-      loginSuccess({
-        email: email,
-        token: token,
-        isAuthenticated: true,
-        errorMessage: '',
-      })
+    this.store.dispatch(
+      loginRequest({ email: user.email, password: user.password })
     );
 
-    //this._store.dispatch(setTokenLocalStorage({ email, token }));
+    this.loading = false;
 
-    //this._router.navigate(['home']);
+    // this._authService.login(user).subscribe({
+    //   next: (data) => {
+    //     this.setLoginState(data.email, data.idToken);
+    //   },
+    //   error: (error) => {
+    //     this.toast?.show();
+    //     this.loading = false;
+    //   },
+    //   complete: () => {
+    //     console.info('request finished');
+    //     this.loading = false;
+    //   },
+    // });
   }
+
+  // private setLoginState(email: string, token: string): void {
+  //   this._store.dispatch(
+  //     loginSuccess({
+  //       email: email,
+  //       token: token,
+  //       isAuthenticated: true,
+  //       errorMessage: '',
+  //     })
+  //   );
+
+  //   //this._store.dispatch(setTokenLocalStorage({ email, token }));
+
+  //   //this._router.navigate(['home']);
+  // }
 }

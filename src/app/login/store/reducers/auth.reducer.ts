@@ -1,12 +1,11 @@
-import { Action, createReducer, on } from '@ngrx/store';
 import {
-  setAuthData,
-  setTokenLocalStorage,
-  deleteTokenLocalStorage,
-  loginSuccess,
-  logout,
-  loginFailure,
-} from '../actions/auth.actions';
+  Action,
+  createFeatureSelector,
+  createReducer,
+  createSelector,
+  on,
+} from '@ngrx/store';
+import { loginSuccess, logout, loginFailure } from '../actions/auth.actions';
 type Nullable<T> = T | null;
 
 export interface AuthState {
@@ -23,20 +22,32 @@ export const authInitState: AuthState = {
   errorMessage: '',
 };
 
-export const authReducer = createReducer(
+const _authReducer = createReducer(
   authInitState,
-  on(
-    loginSuccess,
-    (state, { email, token, isAuthenticated, errorMessage }) => ({
-      email,
-      isAuthenticated,
-      token,
-      errorMessage,
-    })
-  ),
+  on(loginSuccess, (state, { email, token, isAuthenticated }) => ({
+    ...state,
+    email,
+    isAuthenticated,
+    token,
+  })),
   on(logout, () => authInitState),
   on(loginFailure, (state, { errorMessage }) => ({
     ...authInitState,
     errorMessage,
   }))
+);
+
+export function authReducer(state: any, action: any) {
+  return _authReducer(state, action);
+}
+
+export const selectAuthState = createFeatureSelector<AuthState>('auth');
+export const seletcToken = createSelector(
+  selectAuthState,
+  (state) => state.token
+);
+
+export const isAuthenticated = createSelector(
+  selectAuthState,
+  (state) => state.isAuthenticated
 );
