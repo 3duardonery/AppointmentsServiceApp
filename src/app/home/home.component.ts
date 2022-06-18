@@ -20,17 +20,15 @@ export class HomeComponent implements OnInit {
   appointmentsScheduled: AppointmentResponse[] = [];
 
   constructor(
-    private _store: Store<{ app: AuthState }>,
-    private _authService: AuthenticationService,
     private appointmentService: AppointmentsService,
     private _router: Router
   ) {}
 
-  // @ViewChild('add_appointment_modal', { static: true })
-  // modalElement!: ElementRef<HTMLDivElement>;
-
   ngOnInit(): void {
-    // this.modal = new Modal(this.modalElement.nativeElement, {});
+    this.setAppointmentsSheduled();
+  }
+
+  private setAppointmentsSheduled(): void {
     this.appointmentService
       .getAppointmentsByUserEmail('edu.nery.cordeiro@gmail.com')
       .subscribe({
@@ -44,11 +42,11 @@ export class HomeComponent implements OnInit {
       });
   }
 
-  openModal(): void {
+  goToCreatePage(): void {
     this._router.navigate(['appointments/create']);
-    // this.showModal = true;
+  }
 
-    // event?.preventDefault();
-    // this.modal?.show();
+  goToFilterPage(): void {
+    this._router.navigate(['appointments/filter']);
   }
 }

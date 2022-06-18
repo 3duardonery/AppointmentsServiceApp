@@ -20,3 +20,11 @@
   background-color: var(--primary-color);
   border-color: var(--primary-color);
 }
+
+h2,
+label,
+select,
+p {
+  font-family: "Poppins", sans-serif;
+  color: var(--primary-color);
+}

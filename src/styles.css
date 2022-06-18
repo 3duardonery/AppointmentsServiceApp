@@ -15,8 +15,8 @@ h3 {
   height: 20px;
   border-radius: 50%;
   border: 5px solid;
-  border-color: #dbdcef;
-  border-right-color: #474bff;
+  border-color: #dbefdc;
+  border-right-color: var(--primary-color);
   animation: spinner-d3wgkg 1s infinite linear;
 }
 

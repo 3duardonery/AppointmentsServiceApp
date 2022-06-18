@@ -40,8 +40,6 @@ export class LoginComponent implements OnInit {
   toastEl!: ElementRef<HTMLDivElement>;
   toast: Toast | null = null;
 
-  // isAuthenticated = false;
-
   isAuthenticated$ = this._store.select(isAuthenticated);
 
   constructor(

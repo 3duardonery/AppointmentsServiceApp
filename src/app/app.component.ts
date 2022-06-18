@@ -17,6 +17,6 @@ export class AppComponent {
 
   logout(event: Event): void {
     this._authService.logout();
-    this._router.navigate(['login']);
+    this._router.navigateByUrl('login');
   }
 }

@@ -5,7 +5,7 @@
     ></app-header>
   </div>
   <div class="row d-flex flex-row flex-wrap justify-content-center">
-    <div class="menu_item" (click)="openModal()">
+    <div class="menu_item" (click)="goToCreatePage()">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"
@@ -23,7 +23,7 @@
       </svg>
       Agendar Cliente
     </div>
-    <div class="menu_item">
+    <div class="menu_item" (click)="goToFilterPage()">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"

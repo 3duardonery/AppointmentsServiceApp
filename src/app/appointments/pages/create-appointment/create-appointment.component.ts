@@ -114,6 +114,8 @@ export class CreateAppointmentComponent implements OnInit {
     this.createAppointmentObject.customerName =
       this.createAppointmentFormGroup.get('customerName')?.value;
 
+    console.log(this.createAppointmentObject);
+
     this.appointmentService
       .saveAnAppointment(this.createAppointmentObject)
       .subscribe({

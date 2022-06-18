@@ -16,4 +16,11 @@ export class BookService {
     const params = new HttpParams().set('serviceId', serviceId);
     return this._http.get<Book[]>(`${this._url}/books`, { params });
   }
+
+  getBooksByProfessionalEmail(email: string): Observable<Book[]> {
+    const params = new HttpParams().set('email', email);
+    return this._http.get<Book[]>(`${this._url}/books/professional`, {
+      params,
+    });
+  }
 }

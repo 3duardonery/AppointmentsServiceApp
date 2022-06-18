@@ -1,0 +1,104 @@
+<div class="container d-flex flex-column justify-content-center mt-3">
+  <h2>Consultar Agendas Disponíveis</h2>
+  <div *ngIf="loading; else elseBlock" class="spinner"></div>
+  <ng-template #elseBlock>
+    <div class="row">
+      <div class="col-12 col-md-4 col-lg-4">
+        <label>Selecione a data</label>
+
+        <select
+          class="form-select mb-3"
+          aria-label="Default select example"
+          (change)="selectBook($event)"
+        >
+          <option value="default">
+            Há {{ availableBooks.length }} datas disponíveis
+          </option>
+          <option
+            *ngFor="let availableDate of availableBooks"
+            [value]="availableDate.bookDateStringValue"
+          >
+            {{ availableDate.bookDateStringValue }}
+          </option>
+        </select>
+        <div class="form-check form-switch">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            role="switch"
+            id="flexSwitchCheckDefault"
+            (change)="hideCancelledAppointments($event)"
+          />
+          <label class="form-check-label" for="flexSwitchCheckDefault"
+            >Esconder agendamentos cancelados</label
+          >
+        </div>
+      </div>
+      <hr />
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Horário</th>
+              <th scope="col">Id Cliente</th>
+              <th scope="col">Nome do Cliente</th>
+              <th scope="col">Cancelado?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let slot of availableHours">
+              <td
+                [ngClass]="{
+                  'table-light':
+                    slot.customerId == null && slot.isCancelled == false,
+                  'table-success':
+                    slot.customerId != null && slot.isCancelled == false,
+                  'table-danger':
+                    slot.customerId != null && slot.isCancelled == true
+                }"
+              >
+                {{ slot.availableHour }}
+              </td>
+              <td
+                [ngClass]="{
+                  'table-light':
+                    slot.customerId == null && slot.isCancelled == false,
+                  'table-success':
+                    slot.customerId != null && slot.isCancelled == false,
+                  'table-danger':
+                    slot.customerId != null && slot.isCancelled == true
+                }"
+              >
+                {{ slot.customerId }}
+              </td>
+              <td
+                [ngClass]="{
+                  'table-light':
+                    slot.customerId == null && slot.isCancelled == false,
+                  'table-success':
+                    slot.customerId != null && slot.isCancelled == false,
+                  'table-danger':
+                    slot.customerId != null && slot.isCancelled == true
+                }"
+              >
+                {{ slot.customerName }}
+              </td>
+              <td
+                [ngClass]="{
+                  'table-light':
+                    slot.customerId == null && slot.isCancelled == false,
+                  'table-success':
+                    slot.customerId != null && slot.isCancelled == false,
+                  'table-danger':
+                    slot.customerId != null && slot.isCancelled == true
+                }"
+              >
+                {{ slot.isCancelled ? "Sim" : "Não" }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-template>
+</div>

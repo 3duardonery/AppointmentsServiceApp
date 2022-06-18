@@ -1,9 +1,12 @@
+import { ServiceJob } from './services-jobs';
+
 export interface Book {
   date: string;
-  bookDateStringValue: string;
-  availableHours: AvailableHour[];
-  isEnabled: boolean;
-  professionalReference: Professional;
+  bookDateStringValue?: string;
+  availableHours?: AvailableHour[];
+  isEnabled?: boolean;
+  professionalReference?: Professional;
+  serviceReferences?: ServiceJob[];
 }
 
 export interface AvailableHour {
@@ -11,6 +14,7 @@ export interface AvailableHour {
   availableHour: string;
   professionalId: string;
   customerId: string;
+  customerName: string;
   isCancelled: boolean;
 }
 

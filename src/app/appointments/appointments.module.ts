@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { PagesGuard } from '../shared/providers/pages-guard';
 import { CreateAppointmentComponent } from './pages/create-appointment/create-appointment.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FilterAppointmentsComponent } from './pages/filter-appointments/filter-appointments.component';
 
 const routes: Routes = [
   {
@@ -14,12 +15,16 @@ const routes: Routes = [
         path: 'create',
         component: CreateAppointmentComponent,
       },
+      {
+        path: 'filter',
+        component: FilterAppointmentsComponent,
+      },
     ],
   },
 ];
 
 @NgModule({
-  declarations: [CreateAppointmentComponent],
+  declarations: [CreateAppointmentComponent, FilterAppointmentsComponent],
   imports: [CommonModule, RouterModule.forChild(routes), ReactiveFormsModule],
 })
 export class AppointmentsModule {}
