@@ -14,8 +14,7 @@ import { StaticLabels } from '../shared/constants/static-labels';
 import { User } from '../shared/models/user-model';
 import { AuthenticationService } from '../shared/services/authentication.service';
 import { loginRequest, loginSuccess } from './store/actions/auth.actions';
-import { AppState } from './store/app.state';
-import { AuthState } from './store/reducers/auth.reducer';
+import { AuthState, isAuthenticated } from './store/reducers/auth.reducer';
 
 declare var window: any;
 
@@ -41,23 +40,24 @@ export class LoginComponent implements OnInit {
   toastEl!: ElementRef<HTMLDivElement>;
   toast: Toast | null = null;
 
-  authPage$ = this._store.select('app').pipe(map((e) => e));
+  // isAuthenticated = false;
 
-  isAuthenticated = false;
+  isAuthenticated$ = this._store.select(isAuthenticated);
 
   constructor(
-    private _store: Store<{ app: AuthState }>,
-    private store: Store<AppState>,
+    private _store: Store<AuthState>,
     private _authService: AuthenticationService,
-    private _router: Router
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.toast = new Toast(this.toastEl.nativeElement, {});
-
-    this.authPage$.pipe(take(1)).subscribe((data) => {
-      if (data == undefined) this._authService.logout();
+    this.isAuthenticated$.subscribe({
+      next: (alreadyAuthenticated) => {
+        if (alreadyAuthenticated) this.router.navigateByUrl('/home');
+      },
     });
+
+    this.toast = new Toast(this.toastEl.nativeElement, {});
 
     this.loginGroup = new FormGroup({
       email: new FormControl(this.user.email, [Validators.required]),
@@ -77,39 +77,10 @@ export class LoginComponent implements OnInit {
       password: this.loginGroup.get('password')?.value,
     };
 
-    this.store.dispatch(
+    this._store.dispatch(
       loginRequest({ email: user.email, password: user.password })
     );
 
     this.loading = false;
-
-    // this._authService.login(user).subscribe({
-    //   next: (data) => {
-    //     this.setLoginState(data.email, data.idToken);
-    //   },
-    //   error: (error) => {
-    //     this.toast?.show();
-    //     this.loading = false;
-    //   },
-    //   complete: () => {
-    //     console.info('request finished');
-    //     this.loading = false;
-    //   },
-    // });
   }
-
-  // private setLoginState(email: string, token: string): void {
-  //   this._store.dispatch(
-  //     loginSuccess({
-  //       email: email,
-  //       token: token,
-  //       isAuthenticated: true,
-  //       errorMessage: '',
-  //     })
-  //   );
-
-  //   //this._store.dispatch(setTokenLocalStorage({ email, token }));
-
-  //   //this._router.navigate(['home']);
-  // }
 }

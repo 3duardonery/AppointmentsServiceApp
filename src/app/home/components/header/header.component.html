@@ -1,5 +1,8 @@
 <div class="container mt-5">
   <div class="row text-center">
-    <h2>{{ headerText }}</h2>
+    <h2>
+      Você tem {{ numberOfAppointments }} agendamento(s) para hoje
+      {{ today.toLocaleDateString() }}
+    </h2>
   </div>
 </div>

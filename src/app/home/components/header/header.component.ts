@@ -6,9 +6,16 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
-  @Input() headerText: string = '';
+  @Input() numberOfAppointments: number = 0;
+
+  today: Date = new Date();
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(this.today.toLocaleString());
+    console.log(this.today.toDateString());
+    console.log(this.today.toString());
+    console.log(this.today.toLocaleDateString());
+  }
 }

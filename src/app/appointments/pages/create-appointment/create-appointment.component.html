@@ -1,76 +1,123 @@
 <div class="container">
-  <label>Selecione o serviço</label>
-  <select
-    class="form-select mb-3"
-    aria-label="Default select example"
-    (change)="getBooksByServiceId($event)"
-  >
-    <option value="default">Selecione o serviço desejado</option>
-    <option *ngFor="let service of serviceJobs" [value]="service.id">
-      {{ service.description }}
-    </option>
-  </select>
-  <label>Selecione a data</label>
-  <select
-    class="form-select mb-3"
-    aria-label="Default select example"
-    (change)="getAvailableHoursByServiceId($event)"
-  >
-    <option value="default">
-      Há {{ availableDates.length }} datas disponíveis
-    </option>
-    <option
-      *ngFor="let availableDate of availableDates"
-      [value]="availableDate"
+  <form [formGroup]="createAppointmentFormGroup" (ngSubmit)="save()">
+    <label>Selecione o serviço</label>
+    <select
+      class="form-select mb-3"
+      aria-label="Default select example"
+      (change)="getBooksByServiceId($event)"
+      formControlName="service"
     >
-      {{ availableDate }}
-    </option>
-  </select>
-  <label for="cpf_customer">Digite o documento do cliente</label>
-  <input
-    id="cpf_customer"
-    class="form-control input_border mb-3"
-    type="text"
-    placeholder="Cpf do Cliente"
-  />
-  <label for="cpf_customer">Digite o nome do cliente</label>
-  <input
-    id="name_customer"
-    class="form-control input_border mb-3"
-    type="text"
-    placeholder="Nome do Cliente"
-  />
-  <p>Horários diponíveis</p>
-  <div class="row d-flex flex-row flex-wrap">
-    <div
-      class="btn-group"
-      role="group"
-      aria-label="Basic radio toggle button group"
+      <option value="default">Selecione o serviço desejado</option>
+      <option *ngFor="let service of serviceJobs" [value]="service.id">
+        {{ service.description }}
+      </option>
+    </select>
+    <label>Selecione a data</label>
+    <select
+      class="form-select mb-3"
+      aria-label="Default select example"
+      (change)="getAvailableHoursByServiceId($event)"
+      formControlName="date"
     >
+      <option value="default">
+        Há {{ availableDates.length }} datas disponíveis
+      </option>
+      <option *ngFor="let availableDate of books" [value]="availableDate.date">
+        {{ availableDate.bookDateStringValue }}
+      </option>
+    </select>
+    <label for="cpf_customer">Digite o documento do cliente</label>
+    <input
+      id="cpf_customer"
+      class="form-control input_border mb-3"
+      type="text"
+      placeholder="Cpf do Cliente"
+      formControlName="customerId"
+    />
+    <label for="cpf_customer">Digite o nome do cliente</label>
+    <input
+      id="name_customer"
+      class="form-control input_border mb-3"
+      type="text"
+      placeholder="Nome do Cliente"
+      formControlName="customerName"
+    />
+    <p>Horários diponíveis</p>
+    <div class="row d-flex flex-row flex-wrap">
       <div
-        class="d-flex flex-row justify-content-center"
-        *ngFor="let hour of availableHours"
+        class="btn-group"
+        role="group"
+        aria-label="Basic radio toggle button group"
       >
-        <input
-          type="radio"
-          class="btn-check"
-          name="btnradio"
-          id="{{ hour }}"
-          autocomplete="off"
-          (click)="selectTime(hour)"
-        />
-        <label class="btn btn-outline-success" for="{{ hour }}">{{
-          hour
-        }}</label>
+        <div
+          class="d-flex flex-row justify-content-center"
+          *ngFor="let hour of availableHours"
+        >
+          <ng-template [ngIf]="!hour.isCancelled">
+            <input
+              type="radio"
+              class="btn-check"
+              name="btnradio"
+              id="{{ hour.availableHour }}"
+              autocomplete="off"
+              (click)="selectTime(hour.availableHour)"
+            />
+            <label
+              [ngClass]="
+                hour.customerId != null
+                  ? 'btn btn-danger disabled'
+                  : 'btn btn-outline-success'
+              "
+              for="{{ hour.availableHour }}"
+              >{{ hour.availableHour }}</label
+            >
+          </ng-template>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-3">
+          <button
+            type="submit"
+            [disabled]="needToSelectTimeValue"
+            class="btn btn-primary mt-3"
+          >
+            <div class="d-flex justify-content-center">
+              <div *ngIf="loading" class="spinner"></div>
+              Salvar
+            </div>
+          </button>
+        </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-3">
-        <button type="submit" class="btn btn-primary mt-3">
-          <div class="d-flex justify-content-center">
-            <div *ngIf="loading" class="spinner"></div>
-            Salvar
-          </div>
+  </form>
+</div>
+
+<!-- Modal -->
+<div
+  #create_appointment_confirmation
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Agendamento Confirmado
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">O agendamento foi confirmado com sucesso!</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          OK
         </button>
       </div>
     </div>

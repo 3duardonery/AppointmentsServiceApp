@@ -1,6 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectAuthState } from 'src/app/login/store/app.state';
 import {
   AuthState,
   isAuthenticated,
