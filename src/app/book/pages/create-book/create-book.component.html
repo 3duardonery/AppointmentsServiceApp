@@ -1,0 +1,110 @@
+<div class="container">
+  <h2>Realizar um Agendamento</h2>
+
+  <form [formGroup]="createBookFormGroup" (ngSubmit)="saveBook()">
+    <div
+      *ngIf="servicesLoading; else servicesCheck"
+      class="spinner-border text-success"
+      role="status"
+    >
+      <span class="visually-hidden">Loading...</span>
+    </div>
+
+    <ng-template #servicesCheck>
+      <div>
+        <p>Selecione o(s) serviço(s)</p>
+        <div
+          class="form-check form-check-inline"
+          *ngFor="let service of services"
+        >
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="{{ service.id }}"
+            value="{{ service.id }}"
+            (change)="handleServicesInRequest($event, service.id)"
+          />
+          <label class="form-check-label" for="inlineCheckbox1">{{
+            service.description
+          }}</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <label for="slot">Nome do Profissional</label>
+          <input
+            id="slot"
+            class="form-control input_border mb-3"
+            type="text"
+            value="{{ professional.name || '' }}"
+            readonly
+          />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <label for="slot">Digite a duração de cada slot</label>
+          <input
+            id="slot"
+            class="form-control input_border mb-3"
+            type="number"
+            placeholder="Minutos"
+            formControlName="slot"
+          />
+        </div>
+        <div class="col-md-4">
+          <label for="slot">Digite a hora de início</label>
+          <input
+            id="slot"
+            class="form-control input_border mb-3"
+            type="time"
+            placeholder="Minutos"
+            formControlName="startTime"
+          />
+        </div>
+        <div class="col-md-4">
+          <label for="slot">Digite a hora de fim</label>
+          <input
+            id="slot"
+            class="form-control input_border mb-3"
+            type="time"
+            placeholder="Minutos"
+            formControlName="endTime"
+          />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <label for="slot">Selecione a data inicial</label>
+          <input
+            id="slot"
+            class="form-control input_border mb-3"
+            type="date"
+            placeholder="Minutos"
+            formControlName="startDate"
+          />
+        </div>
+        <div class="col-md-6">
+          <label for="slot">Selecione a data de fim</label>
+          <input
+            id="slot"
+            class="form-control input_border mb-3"
+            type="date"
+            placeholder="Minutos"
+            formControlName="endDate"
+          />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <button type="submit" class="btn btn-primary mt-3">
+            <div class="d-flex justify-content-center">
+              <div *ngIf="isSaving" class="spinner"></div>
+              Salvar
+            </div>
+          </button>
+        </div>
+      </div>
+    </ng-template>
+  </form>
+</div>

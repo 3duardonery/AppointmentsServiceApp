@@ -49,4 +49,8 @@ export class HomeComponent implements OnInit {
   goToFilterPage(): void {
     this._router.navigate(['appointments/filter']);
   }
+
+  goToCreateBookPage(): void {
+    this._router.navigate(['book/create']);
+  }
 }

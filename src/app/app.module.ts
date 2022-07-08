@@ -7,6 +7,7 @@ import { localStorageSync } from 'ngrx-store-localstorage';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AppointmentsModule } from './appointments/appointments.module';
+import { BookModule } from './book/book.module';
 import { HomeModule } from './home/home.module';
 import { LoginModule } from './login/login.module';
 import { AuthEffects } from './login/store/effects/auth.effects';
@@ -28,6 +29,7 @@ export function localStorageSyncReducer(rootReducer: any) {
     LoginModule,
     HomeModule,
     AppointmentsModule,
+    BookModule,
     SharedModule,
     StoreModule.forRoot(
       { auth: authReducer },

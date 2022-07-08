@@ -58,7 +58,7 @@ export class FilterAppointmentsComponent implements OnInit {
   private getAvailbleBooksByProfessional(): void {
     this.loading = true;
     this.bookService
-      .getBooksByProfessionalEmail('edu.nery.cordeiro.com')
+      .getBooksByProfessionalEmail('edu.nery.cordeiro@gmail.com')
       .subscribe({
         next: (response: Book[]) => {
           this.availableBooks = response;
