@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { CreateBook } from 'src/app/shared/models/create-book';
+import { CreateBookResponse } from 'src/app/shared/models/create-book-response';
 import { Professional } from 'src/app/shared/models/professional';
 import { ServiceJob } from 'src/app/shared/models/services-jobs';
+import { BookService } from 'src/app/shared/services/book.service';
 import { ProfessionalsService } from 'src/app/shared/services/professionals.service';
 import { ServicesJobService } from 'src/app/shared/services/services-job.service';
 
@@ -34,9 +36,16 @@ export class CreateBookComponent implements OnInit {
     startTime: '',
   };
 
+  haveMoreThanOneServiceSelected: boolean = false;
+
+  createBookResponse: CreateBookResponse[] = [];
+
   createBookFormGroup: FormGroup = new FormGroup({});
 
-  constructor(private professionalsService: ProfessionalsService) {}
+  constructor(
+    private professionalsService: ProfessionalsService,
+    private bookService: BookService
+  ) {}
 
   ngOnInit(): void {
     this.servicesLoading = true;
@@ -62,14 +71,25 @@ export class CreateBookComponent implements OnInit {
     this.createBookFormGroup = new FormGroup({
       professionalName: new FormControl(this.professional.name, []),
       professionalId: new FormControl(this.professional.id),
-      slot: new FormControl(this.createBookRequest.duration, [
+      duration: new FormControl(
+        { disabled: true, value: this.createBookRequest.duration },
+        [Validators.required]
+      ),
+      startDate: new FormControl(this.createBookRequest.startDate, [
         Validators.required,
       ]),
-      startDate: new FormControl(this.createBookRequest.startDate),
-      endDate: new FormControl(this.createBookRequest.endDate),
-      startTime: new FormControl(this.createBookRequest.startTime),
-      endTime: new FormControl(this.createBookRequest.endTime),
-      serviceId: new FormControl(this.createBookRequest.serviceIds),
+      endDate: new FormControl(this.createBookRequest.endDate, [
+        Validators.required,
+      ]),
+      startTime: new FormControl(this.createBookRequest.startTime, [
+        Validators.required,
+      ]),
+      endTime: new FormControl(this.createBookRequest.endTime, [
+        Validators.required,
+      ]),
+      serviceId: new FormControl(this.createBookRequest.serviceIds, [
+        Validators.required,
+      ]),
     });
   }
 
@@ -78,6 +98,20 @@ export class CreateBookComponent implements OnInit {
 
     this.createBookRequest = this.createBookFormGroup.value;
     this.createBookRequest.serviceIds = this.selectedServices;
+
+    this.isSaving = true;
+
+    this.bookService.saveBook(this.createBookRequest).subscribe({
+      next: (data) => {
+        this.createBookResponse = data;
+      },
+      error: (error) => {
+        console.log(error);
+      },
+      complete: () => {
+        this.isSaving = false;
+      },
+    });
   }
 
   handleServicesInRequest(event: Event, value: string): void {
@@ -90,6 +124,12 @@ export class CreateBookComponent implements OnInit {
         this.selectedServices.findIndex((x) => x == value),
         1
       );
+    }
+
+    if (this.selectedServices.length <= 1) {
+      this.createBookFormGroup.get('duration')?.disable();
+    } else {
+      this.createBookFormGroup.get('duration')?.enable();
     }
   }
 }

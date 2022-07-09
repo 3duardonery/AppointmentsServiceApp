@@ -1,7 +1,7 @@
 <div class="container">
   <h2>Realizar um Agendamento</h2>
 
-  <form [formGroup]="createBookFormGroup" (ngSubmit)="saveBook()">
+  <form class="mt-3" [formGroup]="createBookFormGroup" (ngSubmit)="saveBook()">
     <div
       *ngIf="servicesLoading; else servicesCheck"
       class="spinner-border text-success"
@@ -29,11 +29,11 @@
           }}</label>
         </div>
       </div>
-      <div class="row">
+      <div class="row mt-3">
         <div class="col-12">
           <label for="slot">Nome do Profissional</label>
           <input
-            id="slot"
+            id="professionalName"
             class="form-control input_border mb-3"
             type="text"
             value="{{ professional.name || '' }}"
@@ -49,7 +49,7 @@
             class="form-control input_border mb-3"
             type="number"
             placeholder="Minutos"
-            formControlName="slot"
+            formControlName="duration"
           />
         </div>
         <div class="col-md-4">
@@ -96,8 +96,12 @@
         </div>
       </div>
       <div class="row">
-        <div class="col">
-          <button type="submit" class="btn btn-primary mt-3">
+        <div class="col-4">
+          <button
+            type="submit"
+            class="btn btn-primary mt-3"
+            [disabled]="createBookFormGroup.invalid"
+          >
             <div class="d-flex justify-content-center">
               <div *ngIf="isSaving" class="spinner"></div>
               Salvar
