@@ -21,9 +21,12 @@
       formControlName="date"
     >
       <option value="default">
-        Há {{ availableDates.length }} datas disponíveis
+        Há {{ availableBook.length }} datas disponíveis
       </option>
-      <option *ngFor="let availableDate of books" [value]="availableDate.date">
+      <option
+        *ngFor="let availableDate of availableBook"
+        [value]="availableDate.date"
+      >
         {{ availableDate.bookDateStringValue }}
       </option>
     </select>

@@ -54,7 +54,6 @@ export class CreateBookComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.professional = data;
-          console.log(this.professional);
           this.services = this.professional.services;
         },
         error: (error) => {
@@ -73,7 +72,7 @@ export class CreateBookComponent implements OnInit {
       professionalId: new FormControl(this.professional.id),
       duration: new FormControl(
         { disabled: true, value: this.createBookRequest.duration },
-        [Validators.required]
+        []
       ),
       startDate: new FormControl(this.createBookRequest.startDate, [
         Validators.required,
@@ -87,9 +86,7 @@ export class CreateBookComponent implements OnInit {
       endTime: new FormControl(this.createBookRequest.endTime, [
         Validators.required,
       ]),
-      serviceId: new FormControl(this.createBookRequest.serviceIds, [
-        Validators.required,
-      ]),
+      serviceId: new FormControl(this.createBookRequest.serviceIds, []),
     });
   }
 

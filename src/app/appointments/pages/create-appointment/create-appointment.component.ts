@@ -19,8 +19,8 @@ export class CreateAppointmentComponent implements OnInit {
 
   serviceJobs: ServiceJob[] = [];
   books: Book[] = [];
+  availableBook: Book[] = [];
 
-  availableDates: string[] = [];
   availableHours: AvailableHour[] = [];
 
   createAppointmentObject: CreateAppointment = {};
@@ -69,6 +69,19 @@ export class CreateAppointmentComponent implements OnInit {
     });
   }
 
+  getAvailableBooks(): Book[] {
+    let books: Book[] = [];
+    this.books.forEach((value) => {
+      if (
+        value.availableHours!.filter((x) => x.customerId == null).length > 0
+      ) {
+        books.push(value);
+      }
+    });
+
+    return books;
+  }
+
   getBooksByServiceId(event: any): void {
     let serviceId = event.target.value;
 
@@ -76,11 +89,8 @@ export class CreateAppointmentComponent implements OnInit {
 
     this._bookService.getBooksByServiceId(serviceId).subscribe({
       next: (data) => {
-        console.table(data);
         this.books = data;
-        this.availableDates = data.map((value) => {
-          return new Date(value.date).toISOString().split('T')[0];
-        });
+        this.availableBook = this.getAvailableBooks();
       },
       error: (error) => {
         console.error(error);
@@ -120,7 +130,7 @@ export class CreateAppointmentComponent implements OnInit {
         next: (response) => {
           this.modal?.show();
           this.createAppointmentFormGroup.reset();
-          this.availableDates = [];
+          this.availableBook = [];
           this.availableHours = [];
         },
         error: (error) => {
